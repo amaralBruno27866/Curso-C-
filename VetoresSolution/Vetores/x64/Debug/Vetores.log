@@ -1,0 +1,3 @@
+﻿  header.cpp
+C:\Users\BeaglePC\Documents\Curso C++\VetoresSolution\Vetores\header.cpp(25,15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Vetores.vcxproj -> C:\Users\BeaglePC\Documents\Curso C++\VetoresSolution\x64\Debug\Vetores.exe
