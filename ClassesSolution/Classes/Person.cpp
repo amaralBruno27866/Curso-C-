@@ -7,17 +7,18 @@
 
 using namespace std;
 namespace sdds {
-	Person::Person() {
+	Person::Person()
+	{
 		m_id = 0;
 		m_fullName = nullptr;
 		m_cpf = 0;
 		m_day = 0;
 		m_month = 0;
 		m_year = 0;
-		m_birthday = 0;
 	}
 
-	Person::Person(const Person& person) : m_id(0), m_fullName(nullptr), m_cpf(0), m_day(0), m_month(0), m_year(0), m_birthday(0){
+	Person::Person(const Person& person) : m_id(0), m_fullName(nullptr), m_cpf(0), m_day(0), m_month(0), m_year(0)
+	{
 		if (this != &person) {
 			m_id = person.m_id;
 			copy(m_fullName, person.m_fullName);
@@ -25,11 +26,11 @@ namespace sdds {
 			m_day = person.m_day;
 			m_month = person.m_month;
 			m_year = person.m_year;
-			m_birthday = person.m_birthday;
 		}
 	}
 
-	Person& Person::operator=(const Person& person) {
+	Person Person::operator=(const Person& person)
+	{
 		if (this != &person) {
 			m_id = person.m_id;
 			copy(m_fullName, person.m_fullName);
@@ -37,18 +38,49 @@ namespace sdds {
 			m_day = person.m_day;
 			m_month = person.m_month;
 			m_year = person.m_year;
-			m_birthday = person.m_birthday;
 		}
 		return *this;
 	}
 
-	Person::~Person() {
+	Person::~Person()
+	{
 		delete[] m_fullName;
 		m_fullName = nullptr;
+		cout << "m_fullName was deleted" << endl;
 	}
 
-	bool Person::isValid(const char* word) {
-		for (size_t i = 0; i < strlen(word); ++i) {
+	void Person::copy(char*& dest, const char* src)
+	{
+		delete[] dest;
+		dest = nullptr;
+		if (src != nullptr && src[0] != '\0') {
+			dest = new char[strlen(src) + 1];
+			strcpy(dest, src);
+		}
+	}
+
+	void Person::copyN(int*& dest, const int* src)
+	{
+		delete[] dest;
+		dest = nullptr;
+		if (src != nullptr) {
+			dest = new int[MAX_CPF + 1];
+			for (int i = 0; i <= MAX_CPF; i++) {
+				dest[i] = src[i];
+			}
+		}
+	}
+
+	void Person::readArr(int* arr, int size)
+	{
+		for (int i = 0; i < size; i++) {
+			cin >> arr[i];
+		}
+	}
+
+	bool Person::isString(const char* word)
+	{
+		for (size_t i = 0; i < strlen(word); i++) {
 			if (!std::isalpha(word[i]) && !std::isspace(word[i])) {
 				return false;
 			}
@@ -56,16 +88,37 @@ namespace sdds {
 		return true;
 	}
 
-	bool Person::isNumber(const char* num) {
-		for (size_t i = 0; i < strlen(num); i++) {
-			if (!std::isdigit(num[i])) {
-				return false;
+	bool Person::isNumber(const int* num, int size)
+	{
+		bool isValid = false;
+		for (int i = 0; i <= size; i++) {
+			if (num[i] < 0 || num[i] > 9) {
+				cout << "The number must be between 0 to 9" << endl;
+				isValid = false;
+			}
+			else {
+				isValid = true;
 			}
 		}
-		return true;
+
+		return isValid;
 	}
 
-	char* Person::fullName() {
+	int Person::createID(int newID)
+	{
+		do {
+			cout << "Insert the ID number with 4 digits: " << endl;
+			cout << ">>> ";
+			cin >> newID;
+		} while (newID < 1000 || newID > 9999);
+
+		m_id = newID;
+
+		return m_id;
+	}
+
+	char* Person::fullName()
+	{
 		char firstName[MAX_NAME];
 		char lastName[MAX_NAME];
 
@@ -75,14 +128,12 @@ namespace sdds {
 		do {
 			cout << "Insert the first name: ";
 			cin >> firstName;
-
-		} while (!isValid(firstName));
+		} while (!isString(firstName));
 
 		do {
 			cout << "Insert the last name: ";
-			cin >> lastName;
-
-		} while (!isValid(lastName));
+			cin >> firstName;
+		} while (!isString(lastName));
 
 		size_t word1 = strlen(firstName);
 		size_t word2 = strlen(lastName);
@@ -95,107 +146,19 @@ namespace sdds {
 
 		m_fullName = fullName;
 
-		return fullName;
+		return m_fullName;
 	}
 
-	time_t Person::getDate(int day, int month, int year) {
-		bool valid = false;
-
+	long long Person::insertCPF(long long newCPF)
+	{
 		do {
-			cout << "Day: ";
-			cin >> day;
-			cout << "Month: ";
-			cin >> month;
-			cout << "Year: ";
-			cin >> year;
-
-			if (month == 2) {
-				if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-					if (day < 1 || day > 29) {
-						cout << "Invalid day for Februayr in a leap year...";
-						day = 0;
-						month = 0;
-						year = 0;
-						valid = false;
-					}
-				}
-				else {
-					if (day < 1 || day > 28) {
-						cout << "Invalid day for February in a non-leap year...";
-						day = 0;
-						month = 0;
-						year = 0;
-						valid = false;
-					}
-				}
-			}
-
-			if (month == 4 || month == 6 || month == 9 || month == 11) {
-				if (day < 1 || day > 30) {
-					cout << "Invalid day for this month...";
-					day = 0;
-					month = 0;
-					year = 0;
-					valid = false;
-				}
-			}
-
-			if (day < 1 || day > 31) {
-				cout << "Invalid day for this month...";
-				day = 0;
-				month = 0;
-				year = 0;
-				valid = false;
-			}
-			valid = true;
-		} while (valid == false);
-
-		struct tm birthday = {0};
-		birthday.tm_mday = day;
-		birthday.tm_mon = month - 1;
-		birthday.tm_year = year - 1900;
-
-		time_t birthdayDate = mktime(&birthday);
-
-		m_birthday = birthdayDate;
-		
-		return birthdayDate;
-	}
-
-	int Person::getCPF(int cpf) {
-		string newCPF;
-
-		do {
-			cout << "Insert the CPF number whit 11 digits: ";
+			cout << "Insert the CPF number with 11 digits: " << endl;
+			cout << ">>> ";
 			cin >> newCPF;
-		} while (newCPF.length() > 11 || newCPF.length() < 0 || !isNumber(newCPF.c_str()));
+		} while (newCPF < 10000000000 || newCPF > 99999999999);
 
-		cpf = stoi(newCPF);
-		m_cpf = cpf;
+		m_cpf = newCPF;
 
-		return cpf;
-	}
-
-	int Person::getID(int id) {
-		string newID;
-
-		do {
-			cout << "Insert the ID number with up to 8 digits: ";
-			cin >> newID;
-		} while (newID.length() > 9 || newID.length() < 0 || !isNumber(newID.c_str()));
-
-		id = stoi(newID);
-		m_id = id;
-
-		return id;
-	}
-
-	void Person::copy(char*& dest, const char* src) {
-		delete[] dest;
-		dest = nullptr;
-		if (src != nullptr && src[0] != '\0') {
-			dest = new char[strlen(src) + 1];
-			strcpy(dest, src);
-		}
+		return m_cpf;
 	}
 }
