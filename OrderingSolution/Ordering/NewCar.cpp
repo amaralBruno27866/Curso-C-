@@ -166,19 +166,20 @@ namespace sdds {
 		bool valid = false;
 
 		do {
-			cout << "+--------------------+" << endl;
-			cout << "|    Options Menu    |" << endl;
-			cout << "+--------------------+" << endl;
-			cout << "| #1 | New car       |" << endl;
-			cout << "| #2 | Print list    |" << endl;
-			cout << "| #3 | Order by Name |" << endl;
-			cout << "| #4 | Order by ID   |" << endl;
-			cout << "| #5 | Exit          |" << endl;
-			cout << "+--------------------+" << endl << endl;
+			cout << "+---------------------+" << endl;
+			cout << "|    Options Menu     |" << endl;
+			cout << "+---------------------+" << endl;
+			cout << "| # 1 | New car       |" << endl;
+			cout << "| # 2 | Print list    |" << endl;
+			cout << "| # 3 | Order by Name |" << endl;
+			cout << "| # 4 | Order by ID   |" << endl;
+			cout << "| # 5 | Exit          |" << endl;
+			cout << "+---------------------+" << endl << endl;
 
 			do {
 				cout << " >>> ";
 				cin >> option;
+				cout << endl;
 				if (option < 1 || option > 5) {
 					cout << "Insert a valid value" << endl;
 				}
